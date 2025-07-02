@@ -1,4 +1,5 @@
 const logService = require('../services/logService');
+const socketService = require('../services/socketService');
 const validateLog = require('../utils/validateLog');
 
 
@@ -18,6 +19,10 @@ exports.ingestLog = async (req, res) => {
 
   try {
     const savedLog = await logService.saveLog(log);
+    const io = socketService.getIO();
+    
+    io.emit('new_log', savedLog);
+
     res.status(201).json(savedLog);
   } catch (err) {
     console.error('Error saving log:', err);

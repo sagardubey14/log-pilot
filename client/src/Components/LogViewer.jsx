@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LogCard from "./LogCard";
 import LogsLevelChart from "./LogsLevelChart";
+import { io } from "socket.io-client";
+import useDebounce from "../hooks/useDebounce";
 
 const levelOptions = ["error", "warn", "info", "debug"];
 
@@ -9,7 +11,6 @@ export default function LogViewer() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-
   const [filters, setFilters] = useState({
     message: "",
     level: "",
@@ -17,6 +18,29 @@ export default function LogViewer() {
     timestamp_start: "",
     timestamp_end: "",
   });
+
+  useEffect(() => {
+    const socket = io("http://localhost:3001");
+    socket.on("connect", () => {
+      console.log("Connected to server:", socket.id);
+    });
+
+    socket.on("new_log", (log) => {
+      console.log("New log received:", log);
+      appendLogs(log);
+    });
+
+    return () => {
+      socket.off("new_log");
+      socket.disconnect();
+    };
+  }, []);
+
+  const appendLogs = (newLog) => {
+    setLogs((prev) => [newLog, ...prev]);
+  };
+
+  const debouncedFilter = useDebounce(filters, 1000);
 
   const fetchLogs = async () => {
     try {
@@ -40,7 +64,7 @@ export default function LogViewer() {
 
   useEffect(() => {
     fetchLogs();
-  }, [filters]);
+  }, [debouncedFilter]);
 
   const handleChange = (e) => {
     setFilters({
@@ -69,21 +93,21 @@ export default function LogViewer() {
         Log Pilot
       </h1>
 
-        <div className="flex justify-end md:hidden mb-4">
-          <button
-            onClick={() => setShowMobileFilters(true)}
-            className="flex items-center gap-2 bg-green-900 text-green-300 px-3 py-2 rounded shadow-sm hover:bg-green-700 transition"
-          >
-            <span className="text-lg bx bx-filter " aria-hidden="true" />
-            <span>Filter</span>
-          </button>
-        </div>
+      <div className="flex justify-end md:hidden mb-4">
+        <button
+          onClick={() => setShowMobileFilters(true)}
+          className="flex items-center gap-2 bg-green-900 text-green-300 px-3 py-2 rounded shadow-sm hover:bg-green-700 transition"
+        >
+          <span className="text-lg bx bx-filter " aria-hidden="true" />
+          <span>Filter</span>
+        </button>
+      </div>
 
       <div
         className={`
           grid grid-cols-1 md:grid-cols-3 gap-4 bg-black border border-green-700 p-4 rounded shadow mb-2
           ${showMobileFilters ? "block" : "hidden"}
-          ${showMobileFilters ? "fixed left-15": 'relative'}
+          ${showMobileFilters ? "fixed left-15" : "relative"}
           z-10
           md:grid
         `}
@@ -147,7 +171,7 @@ export default function LogViewer() {
           Clear Filters
         </button>
       </div>
-        
+
       <LogsLevelChart logs={logs} />
       {loading ? (
         <div className="text-center text-green-400 py-10">
