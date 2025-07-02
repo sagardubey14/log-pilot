@@ -10,5 +10,53 @@
     "metadata": {
       "environment": "staging"
     }
+  },
+  {
+    "level": "error",
+    "message": "Database timeout occurred",
+    "resourceId": "db-01",
+    "timestamp": "2025-06-15T09:21:00.000Z",
+    "traceId": "trace-123abc",
+    "spanId": "span-999888",
+    "commit": "a1b2c3d4",
+    "metadata": {
+      "environment": "production"
+    }
+  },
+  {
+    "level": "debug",
+    "message": "Cache hit for key user-123",
+    "resourceId": "cache-01",
+    "timestamp": "2025-07-01T11:00:00.000Z",
+    "traceId": "trace-777xyz",
+    "spanId": "span-444555",
+    "commit": "11223344",
+    "metadata": {
+      "environment": "development"
+    }
+  },
+  {
+    "level": "warn",
+    "message": "Low disk space on worker-02",
+    "resourceId": "worker-02",
+    "timestamp": "2025-06-20T17:45:30.000Z",
+    "traceId": "trace-456def",
+    "spanId": "span-202122",
+    "commit": "ffeeddcc",
+    "metadata": {
+      "environment": "staging"
+    }
+  },
+  {
+    "level": "info",
+    "message": "User login successful",
+    "resourceId": "api-01",
+    "timestamp": "2025-07-02T13:45:00.000Z",
+    "traceId": "trace-321aaa",
+    "spanId": "span-333444",
+    "commit": "99887766",
+    "metadata": {
+      "environment": "production"
+    }
   }
 ]

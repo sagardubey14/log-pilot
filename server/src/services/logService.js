@@ -19,7 +19,25 @@ const saveLog = async (log) => {
   return log;
 };
 
+const filterLogs = async (query) => {
+  let logs = await readLogs();
+
+  logs = logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  if (query.level) logs = logs.filter(l => l.level === query.level);
+  if (query.message) logs = logs.filter(l => l.message.toLowerCase().includes(query.message.toLowerCase()));
+  if (query.resourceId) logs = logs.filter(l => l.resourceId === query.resourceId);
+  if (query.timestamp_start) logs = logs.filter(l => new Date(l.timestamp) >= new Date(query.timestamp_start));
+  if (query.timestamp_end) logs = logs.filter(l => new Date(l.timestamp) <= new Date(query.timestamp_end));
+  ['traceId', 'spanId', 'commit'].forEach(key => {
+    if (query[key]) logs = logs.filter(l => l[key] === query[key]);
+  });
+
+  return logs;
+};
+
 module.exports = {
   saveLog,
   readLogs,
+  filterLogs,
 };

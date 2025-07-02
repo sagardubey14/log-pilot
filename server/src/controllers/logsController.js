@@ -10,3 +10,13 @@ exports.ingestLog = async (req, res) => {
     res.status(500).json({ error: 'Failed to save log' });
   }
 };
+
+exports.getLogs = async (req, res) => {
+  try {
+    const logs = await logService.filterLogs(req.query);
+    res.status(200).json(logs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to retrieve logs' });
+  }
+};
