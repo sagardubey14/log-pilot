@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LogCard from "./LogCard";
+import LogsLevelChart from "./LogsLevelChart";
 
 const levelOptions = ["error", "warn", "info", "debug"];
 
@@ -146,7 +147,8 @@ export default function LogViewer() {
           Clear Filters
         </button>
       </div>
-
+        
+      <LogsLevelChart logs={logs} />
       {loading ? (
         <div className="text-center text-green-400 py-10">
           <div className="animate-spin h-6 w-6 mx-auto mb-2 border-4 border-green-400 border-t-transparent rounded-full"></div>
