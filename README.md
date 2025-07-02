@@ -57,7 +57,7 @@ log-pilot/
 1. **Clone the Repository**
 
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/sagardubey14/log-pilot.git
    cd log-pilot
    ```
 
