@@ -1,9 +1,10 @@
 import React from 'react'
+import LogViewer from './Components/LogViewer'
 
 function App() {
   return (
-    <div>
-        <h1 className="text-3xl font-bold underline">Log Pilot</h1>
+    <div className='bg-black min-h-screen p-1'>
+        <LogViewer />
     </div>
   )
 }

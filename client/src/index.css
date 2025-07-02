@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+.shadow-glow {
+  box-shadow: 0 0 10px #00fff7, 0 0 20px #00fff7;
+}
+
+.drop-shadow-neon {
+  text-shadow: 0 0 5px #00fff7, 0 0 10px #00fff7;
+}
+
+.shadow-neon {
+  box-shadow: 0 0 6px #00fff7;
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    text-shadow: 0 0 5px #00fff7, 0 0 10px #00fff7;
+    box-shadow: 0 0 6px #00fff7;
+  }
+  50% {
+    text-shadow: 0 0 15px #00fff7, 0 0 30px #00fff7;
+    box-shadow: 0 0 20px #00fff7;
+  }
+}
+
+.animate-pulse-neon {
+  animation: neon-pulse 2s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px #39ff14);
+  }
+  50% {
+    filter: drop-shadow(0 0 15px #39ff14);
+  }
+}
+
+.icon-pulse {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}

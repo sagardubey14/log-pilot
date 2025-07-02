@@ -1,5 +1,4 @@
 module.exports = function validateLog(log) {
-    
     const requiredFields = [
         'level',
         'message',
@@ -7,10 +6,9 @@ module.exports = function validateLog(log) {
         'timestamp',
         'traceId',
         'spanId',
-        'commit'
+        'commit',
+        'metadata',
     ];
-    const allowedFields = [...requiredFields,'metadata'];
-    const errors = [];
 
     const expectedTypes = {
         level: 'string',
@@ -19,11 +17,14 @@ module.exports = function validateLog(log) {
         timestamp: 'string',
         traceId: 'string',
         spanId: 'string',
-        commit: 'string'
+        commit: 'string',
+        metadata: 'object'
     };
 
+    const errors = [];
+
     for (const key of Object.keys(log)) {
-        if (!allowedFields.includes(key)) {
+        if (!requiredFields.includes(key)) {
             errors.push(`Unknown field: ${key}`);
         }
     }
@@ -41,9 +42,14 @@ module.exports = function validateLog(log) {
     }
 
     if ('metadata' in log) {
-        const actualType = typeof log.metadata;
-        if (actualType !== 'object' || Array.isArray(log.metadata) || log.metadata === null) {
-            errors.push(`metadata must be a non-null object`);
+        const metadata = log.metadata;
+        if (
+            typeof metadata !== 'object' ||
+            Array.isArray(metadata) ||
+            metadata === null ||
+            Object.keys(metadata).length === 0
+        ) {
+            errors.push('metadata must be a non-null, non-array object with at least one property');
         }
     }
 
